@@ -1,0 +1,27 @@
+services:
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: risknet-api
+
+    ports:
+      - "8000:8000"
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+
+    container_name: risknet-dashboard
+
+    ports:
+      - "8502:8502"
+
+    environment:
+      API_URL: http://api:8000
+
+    depends_on:
+      - api

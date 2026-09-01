@@ -349,7 +349,90 @@ elif page == "Fraud Rings":
         ],
         use_container_width=True
     )
+    st.divider()
 
+    st.subheader("📊 Selected Ring Intelligence")
+
+    ring_size = len(ring_customers)
+
+    average_risk = ring_customers["final_risk_score"].mean()
+
+    maximum_risk = ring_customers["final_risk_score"].max()
+
+    average_graph_risk = ring_customers["graph_risk_score"].mean()
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    col1.metric(
+        "Ring Members",
+        ring_size
+    )
+
+    col2.metric(
+        "Average Risk",
+        round(average_risk, 2)
+    )
+
+    col3.metric(
+        "Maximum Risk",
+        round(maximum_risk, 2)
+    )
+
+    col4.metric(
+        "Average Graph Risk",
+        round(average_graph_risk, 2)
+    )
+
+    st.divider()
+
+    st.subheader("🚨 Risk Distribution in Ring")
+
+    risk_distribution = (
+        ring_customers["final_risk_level"]
+        .value_counts()
+    )
+
+    st.bar_chart(risk_distribution)
+
+    st.divider()
+
+    st.subheader("⚠️ Risk Reasons")
+
+    reasons = (
+        ring_customers["risk_reason"]
+        .dropna()
+        .value_counts()
+        .head(10)
+    )
+
+    st.dataframe(
+        reasons.reset_index(),
+        use_container_width=True
+    )
+
+    st.divider()
+
+    st.subheader("💳 Payment & Device Intelligence")
+
+    intelligence_columns = [
+        "customer_id",
+        "device_id",
+        "primary_payment_instrument_id",
+        "transaction_count",
+        "chargeback_count",
+        "promo_count",
+        "declined_transactions"
+    ]
+
+    available_columns = [
+        col for col in intelligence_columns
+        if col in ring_customers.columns
+    ]
+
+    st.dataframe(
+        ring_customers[available_columns],
+        use_container_width=True
+    )
 
 # ============================================================
 # RISK ANALYSIS
