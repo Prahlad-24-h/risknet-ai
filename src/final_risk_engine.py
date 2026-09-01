@@ -1,32 +1,57 @@
 import pandas as pd
-import joblib
-
-from src.data_loader import load_data
 
 
-FEATURE_PATH = "data/processed/customer_risk_features.csv"
-PREDICTION_PATH = "data/processed/ml_predictions.csv"
-MODEL_PATH = "models/risk_model.pkl"
+ML_PATH = "data/processed/ml_predictions.csv"
+GRAPH_PATH = "data/processed/graph_risk_results.csv"
+OUTPUT_PATH = "data/processed/final_risk_results.csv"
 
 
-def load_ml_predictions():
+def load_data():
 
-    df = pd.read_csv(PREDICTION_PATH)
+    ml = pd.read_csv(ML_PATH)
+    graph = pd.read_csv(GRAPH_PATH)
 
-    return df
+    return ml, graph
 
 
-def calculate_final_score(df):
+def build_final_risk():
 
-    df = df.copy()
+    ml, graph = load_data()
 
-    # Start with ML risk score
-    df["final_risk_score"] = df["risk_score"]
+    # Keep one graph record per customer
+    graph = graph.drop_duplicates(
+        subset=["customer_id"]
+    )
 
-    # -----------------------------------------
-    # ML risk contribution
-    # -----------------------------------------
+    # Combine ML and graph information
+    df = ml.merge(
+        graph,
+        on="customer_id",
+        how="left"
+    )
 
+    # Missing graph information means
+    # no detected ring
+    df["graph_risk_score"] = (
+        df["graph_risk_score"]
+        .fillna(0)
+    )
+
+    df["graph_risk_level"] = (
+        df["graph_risk_level"]
+        .fillna("LOW")
+    )
+
+    # --------------------------------
+    # Final score
+    # --------------------------------
+
+    df["final_risk_score"] = (
+        df["risk_score"]
+        + df["graph_risk_score"] * 0.30
+    )
+
+    # ML contribution
     df.loc[
         df["ml_risk_level"] == "HIGH",
         "final_risk_score"
@@ -37,41 +62,15 @@ def calculate_final_score(df):
         "final_risk_score"
     ] += 5
 
-    # -----------------------------------------
-    # Chargeback risk
-    # -----------------------------------------
+    df["final_risk_score"] = (
+        df["final_risk_score"]
+        .clip(upper=100)
+        .round(2)
+    )
 
-    df.loc[
-        df["chargeback_rate"] >= 0.10,
-        "final_risk_score"
-    ] += 10
-
-    # -----------------------------------------
-    # Card testing / decline behaviour
-    # -----------------------------------------
-
-    df.loc[
-        df["decline_rate"] >= 0.30,
-        "final_risk_score"
-    ] += 10
-
-    # -----------------------------------------
-    # Coupon abuse behaviour
-    # -----------------------------------------
-
-    df.loc[
-        df["promo_rate"] >= 0.50,
-        "final_risk_score"
-    ] += 10
-
-    # Maximum score
-    df["final_risk_score"] = df[
-        "final_risk_score"
-    ].clip(upper=100)
-
-    # -----------------------------------------
-    # Final risk level
-    # -----------------------------------------
+    # --------------------------------
+    # Final level
+    # --------------------------------
 
     df["final_risk_level"] = "LOW"
 
@@ -85,72 +84,66 @@ def calculate_final_score(df):
         "final_risk_level"
     ] = "HIGH"
 
-    # -----------------------------------------
-    # Fraud ring indicators
-    # -----------------------------------------
+    # --------------------------------
+    # Explainability
+    # --------------------------------
 
-    df["coupon_ring_flag"] = (
-        df["promo_rate"] >= 0.50
-    )
-
-    df["card_testing_flag"] = (
-        df["decline_rate"] >= 0.30
-    )
-
-    df["chargeback_ring_flag"] = (
-        df["chargeback_rate"] >= 0.10
-    )
-    def generate_reason(row):
+    def reason(row):
 
         reasons = []
 
         if row["ml_risk_level"] == "HIGH":
-            reasons.append("ML model detected high risk")
+            reasons.append("ML high risk")
+
+        if row["graph_risk_score"] > 0:
+            reasons.append(
+                "linked to potential fraud ring"
+            )
 
         if row["promo_rate"] >= 0.50:
-            reasons.append("high coupon usage")
+            reasons.append("coupon abuse behaviour")
 
         if row["decline_rate"] >= 0.30:
-            reasons.append("high transaction decline rate")
+            reasons.append("card testing behaviour")
 
         if row["chargeback_rate"] >= 0.10:
-            reasons.append("high chargeback rate")
+            reasons.append("chargeback behaviour")
 
         if not reasons:
-            reasons.append("normal transaction behaviour")
+            reasons.append(
+                "normal transaction behaviour"
+            )
 
         return "; ".join(reasons)
 
     df["risk_reason"] = df.apply(
-        generate_reason,
+        reason,
         axis=1
     )
+
     return df
 
 
 def main():
 
-    df = load_ml_predictions()
-
-    result = calculate_final_score(df)
-
-    output_path = "data/processed/final_risk_results.csv"
-
-    result.to_csv(
-        output_path,
-        index=False
-    )
-
     print("\n================================")
     print("       RISKNET AI ENGINE")
     print("================================\n")
 
+    df = build_final_risk()
+
+    df.to_csv(
+        OUTPUT_PATH,
+        index=False
+    )
+
     print(
-        result[
+        df[
             [
                 "customer_id",
                 "final_risk_score",
                 "final_risk_level",
+                "graph_risk_level",
                 "risk_reason"
             ]
         ]
@@ -162,9 +155,8 @@ def main():
         .to_string(index=False)
     )
 
-    print(
-        "\nSaved:",
-        output_path
-    )
+    print("\nSaved:", OUTPUT_PATH)
+
+
 if __name__ == "__main__":
     main()
