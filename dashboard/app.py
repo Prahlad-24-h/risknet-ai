@@ -319,16 +319,16 @@ elif page == "Fraud Rings":
     st.divider()
 
     selected_ring = st.selectbox(
-        "Select Fraud Ring",
-        sorted(
-            df["fraud_ring_type"]
-            .dropna()
-            .unique()
-        )
+    "Select Fraud Ring",
+    sorted(
+        df["ring_id"]
+        .dropna()
+        .unique()
     )
+)
 
     ring_customers = df[
-        df["fraud_ring_type"]
+        df["ring_id"]
         == selected_ring
     ]
 
@@ -421,3 +421,4 @@ elif page == "Risk Analysis":
             2
         )
     )
+
