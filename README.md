@@ -124,11 +124,11 @@ Ring Customer Count
 Ring Node Count
 Graph Risk Score
 Graph Risk Level
-🚨 Fraud Ring Types
+##🚨 Fraud Ring Types
 
 RISKNET AI supports detection and classification of three major fraud ring patterns.
 
-🎟️ Coupon / Referral Abuse Ring
+##🎟 Coupon / Referral Abuse Ring
 
 Fraudsters create multiple accounts to exploit:
 
@@ -144,7 +144,7 @@ High promo usage
 Multiple accounts
 Connected payment instruments
 
-💳 Card Testing Fraud Ring
+##💳 Card Testing Fraud Ring
 
 Fraudsters test stolen payment cards using multiple transactions.
 
@@ -155,7 +155,7 @@ High decline rates
 Shared payment instruments
 Suspicious transaction patterns
 
-💰 Chargeback Fraud Ring
+##💰 Chargeback Fraud Ring
 
 Fraudsters perform transactions and later dispute them.
 
@@ -256,7 +256,7 @@ risknet-ai/
 ├── requirements.txt
 └── README.md
 ```
-📊 Dataset Features
+##📊 Dataset Features
 
 The processed dataset includes:
 
@@ -277,7 +277,7 @@ final_risk_level	                         Final risk classification
 ring_id	                                         Detected fraud network
 fraud_ring_type	                                 Classified fraud type
 
-🤖 Technology Stack
+##🤖 Technology Stack
 Programming
 Python
 Data Processing
@@ -299,7 +299,7 @@ Docker Compose
 Version Control
 Git
 GitHub
-⚙️ Installation
+##⚙️ Installation
 
 Clone the repository:
 
@@ -307,73 +307,77 @@ git clone YOUR_GITHUB_REPOSITORY_URL
 
 Move into the project:
 
-cd risknet-ai
-
+```cd risknet-ai
+```
 Create a virtual environment:
-
+```
 python -m venv .venv
-
+```
 Activate it:
 
 Linux / WSL
-source .venv/bin/activate
-
+```source .venv/bin/activate
+```
 Install dependencies:
 
-pip install -r requirements.txt
+```pip install -r requirements.txt
+```
 ▶️ Run the API
-uvicorn api.main:app --reload
-
+```uvicorn api.main:app --reload
+```
 API will run on:
-
+```
 http://127.0.0.1:8000
-
+```
 Available endpoints:
-
+```
 /
 /health
 /customers
 /customer/{customer_id}
-📊 Run the Dashboard
+```
+##📊 Run the Dashboard
 
 Open another terminal and activate the virtual environment:
 
-source .venv/bin/activate
-
+```source .venv/bin/activate
+```
 Run:
-
+```
 streamlit run dashboard/app.py --server.port 8502
-
+```
 Open:
-
+```
 http://localhost:8502
-🐳 Docker Deployment
+```
+##🐳 Docker Deployment
 
 Build the Docker image:
 
-docker build -t risknet-ai-api .
-
+```docker build -t risknet-ai-api .
+```
 Run the API container:
-
+```
 docker run --rm -p 8000:8000 risknet-ai-api
-
+```
 For Docker Compose:
-
+```
 docker compose up --build
-📈 Project Outcome
+```
+##📈 Project Outcome
 
 RISKNET AI successfully demonstrates:
 
-Customer-level fraud risk scoring
-Machine Learning-based predictions
-Graph-based relationship analysis
-Fraud ring detection
-Fraud ring classification
-Explainable risk intelligence
-REST API integration
-Interactive dashboard visualization
-Docker-based deployment
-🔮 Future Enhancements
+-Customer-level fraud risk scoring
+-Machine Learning-based predictions
+-Graph-based relationship analysis
+-Fraud ring detection
+-Fraud ring classification
+-Explainable risk intelligence
+-REST API integration
+-Interactive dashboard visualization
+-Docker-based deployment
+##🔮 Future Enhancements
 
 #Future versions can include:
 
