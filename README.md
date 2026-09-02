@@ -30,10 +30,10 @@ However, modern fraud frequently occurs in coordinated fraud rings.
 
 RISKNET AI addresses this problem by combining Machine Learning and Graph Intelligence to detect both individual customer risk and connected fraud networks.
 
----
+
 
 # 💡 Solution
-
+```team
 RISKNET AI analyzes customer data through multiple intelligence layer
 
 Customer Data
@@ -58,7 +58,7 @@ Rule-Based Engine   Machine Learning
               ▼
       Risk Intelligence Dashboard
 
-
+```
 #🧠 Key Features
 1. Customer Risk Scoring
 ach customer receives:
@@ -167,6 +167,8 @@ Connected accounts
 Shared devices or payment instruments
 
 🏗️ Project Architecture
+   ```team
+
                     ┌─────────────────────┐
                     │   Raw Dataset       │
                     │ Excel / CSV         │
@@ -200,8 +202,9 @@ Shared devices or payment instruments
             ┌──────────────┐      ┌──────────────┐
             │ FastAPI API  │      │ Streamlit UI │
             └──────────────┘      └──────────────┘
+```
 📁 Project Structure
-
+```team
 risknet-ai/
 │
 ├── api/
@@ -252,7 +255,7 @@ risknet-ai/
 ├── docker-compose.yml
 ├── requirements.txt
 └── README.md
-
+```
 📊 Dataset Features
 
 The processed dataset includes:
