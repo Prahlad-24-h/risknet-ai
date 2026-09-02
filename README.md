@@ -34,9 +34,8 @@ RISKNET AI addresses this problem by combining Machine Learning and Graph Intell
 
 # 💡 Solution
 
-RISKNET AI analyzes customer data through multiple intelligence layers:
+RISKNET AI analyzes customer data through multiple intelligence layer
 
-```text
 Customer Data
       │
       ▼
@@ -57,14 +56,12 @@ Rule-Based Engine   Machine Learning
        Final Risk Engine
               │
               ▼
-
       Risk Intelligence Dashboard
-```text
 
-🧠 Key Features
+
+#🧠 Key Features
 1. Customer Risk Scoring
-
-Each customer receives:
+ach customer receives:
 
 Final Risk Score
 Final Risk Level
@@ -204,7 +201,7 @@ Shared devices or payment instruments
             │ FastAPI API  │      │ Streamlit UI │
             └──────────────┘      └──────────────┘
 📁 Project Structure
-```text
+
 risknet-ai/
 │
 ├── api/
@@ -255,7 +252,7 @@ risknet-ai/
 ├── docker-compose.yml
 ├── requirements.txt
 └── README.md
-```text
+
 📊 Dataset Features
 
 The processed dataset includes:
@@ -375,7 +372,7 @@ Interactive dashboard visualization
 Docker-based deployment
 🔮 Future Enhancements
 
-Future versions can include:
+#Future versions can include:
 
 Real-time transaction streaming
 Kafka integration
