@@ -57,7 +57,10 @@ Rule-Based Engine   Machine Learning
        Final Risk Engine
               │
               ▼
+
       Risk Intelligence Dashboard
+```text
+
 🧠 Key Features
 1. Customer Risk Scoring
 
@@ -201,6 +204,7 @@ Shared devices or payment instruments
             │ FastAPI API  │      │ Streamlit UI │
             └──────────────┘      └──────────────┘
 📁 Project Structure
+```text
 risknet-ai/
 │
 ├── api/
@@ -251,6 +255,7 @@ risknet-ai/
 ├── docker-compose.yml
 ├── requirements.txt
 └── README.md
+```text
 📊 Dataset Features
 
 The processed dataset includes:
@@ -382,4 +387,3 @@ Automated fraud alerts
 Cloud deployment on AWS
 Kubernetes deployment
 CI/CD pipeline
-```text
